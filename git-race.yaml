@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: git-race-deployment
+  labels:
+    app: git-race
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: git-race
+  template:
+    metadata:
+      labels:
+        app: git-race
+    spec:
+      containers:
+      - name: git-race
+        image: ingweb/git-race
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: git-race-service
+spec:
+  selector:
+    app: git-race
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30500
+

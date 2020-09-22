@@ -34,6 +34,7 @@ Simple Spring web application which can perform several actions:
 * [How to access the password generator](#how-to-access-the-password-generator)
 * [How works the password generator](#how-works-the-password-generator)
 * [How to modify the password generated](#how-to-modify-the-password-generated)
+* [How to deploy on Kubernetes](#how-to-deploy-on-kubernetes)
 
 ## How to build the code
 
@@ -277,3 +278,30 @@ Below the stadistics, you can modify the password specifying how many characters
 * random characters
 
 When a negative number is input, it is ignored.
+
+## How to desploy on Kubernetes
+
+First we'll install Minikube to have a Kubernetes cluster. [Installl Minikube](https://kubernetes.io/es/docs/tasks/tools/install-minikube/) 
+```bash
+minikube start
+```
+Point your shell to minikube’s docker-daemon, run:
+```bash
+eval $(minikube -p minikube docker-env)
+```
+
+It's necessary to build the docker image if we haven't done it yet.
+```bash
+docker build -t ingweb/git-race .
+```
+Apply the kubernetes file to create the external service and the deployment
+```bash
+sudo kubectl apply -f git-race.yaml
+```
+Run on your computer to get an external IP to the app.
+```bash
+minikube service git-race-service
+```
+
+Now we can access to the application on:
+http://192.168.99.100:30500 
